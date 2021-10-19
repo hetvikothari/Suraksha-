@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:suraksha/Dashboard/dashboard.dart';
 import './signup.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -12,109 +15,93 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: <Widget>[
+            child: Column(children: <Widget>[
+          Container(
+              height: 400,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/signup.png'),
+                      fit: BoxFit.fill))),
+          Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(children: <Widget>[
                 Container(
-                  height: 400,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/signup.png'),
-                          fit: BoxFit.fill)),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(30.0),
-                  child: Column(
-                    children: <Widget>[
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Color.fromRGBO(143, 148, 251, .2),
+                              blurRadius: 20.0,
+                              offset: Offset(0, 10))
+                        ]),
+                    child: Column(children: <Widget>[
                       Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color.fromRGBO(143, 148, 251, .2),
-                                  blurRadius: 20.0,
-                                  offset: Offset(0, 10))
-                            ]),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(color: Colors.grey))),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Email",
-                                    suffixIcon: Icon(Icons.email),
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey[400])),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    suffixIcon: Icon(Icons.visibility_off),
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey[400])),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                          height: 60,
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(color: Colors.grey))),
+                          child: TextField(
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Email",
+                                  suffixIcon: const Icon(Icons.email),
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey[400])))),
                       Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(colors: [
-                              Color.fromRGBO(143, 148, 251, 1),
-                              Color.fromRGBO(143, 148, 251, .6),
-                            ])),
-                        child: Center(
-                          child: Text(
-                            "LOGIN",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        "Forgot Password?",
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Password",
+                                  suffixIcon: const Icon(Icons.visibility_off),
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey[400]))))
+                    ])),
+                const SizedBox(height: 30),
+                Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: const LinearGradient(colors: [
+                          Color.fromRGBO(143, 148, 251, 1),
+                          Color.fromRGBO(143, 148, 251, .6)
+                        ])),
+                    child: const Center(
+                        child: Text(
+                      "LOGIN",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ))),
+                const SizedBox(height: 50),
+                const Text("Forgot Password?",
+                    style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1))),
+                const SizedBox(height: 20.0),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
+                    },
+                    child: const Text('Don\'t have an account? SignUp',
+                        style: TextStyle(
+                            color: Color.fromRGBO(143, 148, 251, 1)))),
+                const SizedBox(height: 20),
+                GestureDetector(
+                    child: const Text("Dashboard",
                         style:
-                            TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),
-                      ),
-                      SizedBox(height: 20.0),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignUpPage()));
-                          },
-                          child: Text(
-                            'Don\'t have an account? SignUp',
-                            style: TextStyle(
-                                color: Color.fromRGBO(143, 148, 251, 1)),
-                          )),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ));
+                            TextStyle(color: Color.fromRGBO(143, 148, 251, 1))),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Dashboard()));
+                    })
+              ]))
+        ])));
   }
 }
