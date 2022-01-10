@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:suraksha/constants.dart';
-import 'package:suraksha/login.dart';
+import 'package:suraksha/Authentication/login.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
