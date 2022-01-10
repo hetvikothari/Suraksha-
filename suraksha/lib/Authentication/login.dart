@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suraksha/Dashboard/dashboard.dart';
-import './signup.dart';
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
