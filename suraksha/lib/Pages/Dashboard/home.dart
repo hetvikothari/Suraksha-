@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:suraksha/Dashboard/widgets/appbar.dart';
-import 'package:suraksha/Dashboard/widgets/carousel.dart';
-import 'package:suraksha/Dashboard/widgets/emergency.dart';
-import 'package:suraksha/Dashboard/widgets/livesafe.dart';
-import 'package:suraksha/Dashboard/widgets/safehome.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/appbar.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/carousel.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/emergency.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/livesafe.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/safehome.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

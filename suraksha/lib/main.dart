@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:suraksha/splash.dart';
+import 'package:suraksha/Pages/splash.dart';
 
 void main() => runApp(const MyApp());
 

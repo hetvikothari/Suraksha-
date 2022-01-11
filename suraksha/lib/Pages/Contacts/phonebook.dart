@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:suraksha/Contacts/mycontacts.dart';
-import 'package:suraksha/constants.dart';
+import 'package:suraksha/Pages/Contacts/mycontacts.dart';
+import 'package:suraksha/Helpers/constants.dart';
 
 class PhoneBook extends StatefulWidget {
   const PhoneBook({Key? key}) : super(key: key);

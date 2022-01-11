@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:suraksha/Contacts/mycontacts.dart';
-import 'package:suraksha/Contacts/phonebook.dart';
-import 'package:suraksha/Dashboard/home.dart';
+import 'package:suraksha/Pages/Contacts/mycontacts.dart';
+import 'package:suraksha/Pages/Contacts/phonebook.dart';
+import 'package:suraksha/Pages/Dashboard/home.dart';
 
 class Dashboard extends StatefulWidget {
   final int pageIndex;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:suraksha/constants.dart';
+import 'package:suraksha/Helpers/constants.dart';
 
 class MyContactsScreen extends StatefulWidget {
   const MyContactsScreen({Key? key}) : super(key: key);

@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:suraksha/Dashboard/widgets/articleDesc.dart';
-import 'package:suraksha/Dashboard/widgets/safewebview.dart';
-import 'package:suraksha/constants.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/articleDesc.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/safewebview.dart';
+import 'package:suraksha/Helpers/constants.dart';
 
 class SafeCarousel extends StatelessWidget {
   const SafeCarousel({Key? key}) : super(key: key);

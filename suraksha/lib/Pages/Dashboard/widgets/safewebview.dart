@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:suraksha/constants.dart';
+import 'package:suraksha/Helpers/constants.dart';
 
 class SafeWebView extends StatelessWidget {
   final String url;
