@@ -14,12 +14,24 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   late String name, email, phone, emergencyName, emergencyEmail, emergencyPhone;
+  static bool passflag = true, conpassflag = true;
   AuthenticationController ac = new AuthenticationController();
   //TextController to read text entered in text field
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Map fieldKeys = {
+    'name': GlobalKey<FormFieldState>(),
+    'email': GlobalKey<FormFieldState>(),
+    'phone': GlobalKey<FormFieldState>(),
+    'emergencyName': GlobalKey<FormFieldState>(),
+    'emergencyEmail': GlobalKey<FormFieldState>(),
+    'emergencyPhone': GlobalKey<FormFieldState>(),
+    'password': GlobalKey<FormFieldState>(),
+    'confirmpassword': GlobalKey<FormFieldState>()
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,25 +70,26 @@ class _SignUpPageState extends State<SignUpPage> {
                                         bottom:
                                             BorderSide(color: Colors.grey))),
                                 child: TextFormField(
-                                  controller: password,
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Name",
-                                      suffixIcon:
-                                          const Icon(Icons.visibility_off),
-                                      hintStyle:
-                                          TextStyle(color: Colors.grey[400])),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your name';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    if (value != null) name = value;
-                                  },
-                                ),
+                                    key: fieldKeys['name'],
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Name",
+                                        suffixIcon: const Icon(Icons.person),
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[400])),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter your name';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      if (fieldKeys["name"]
+                                          .currentState!
+                                          .validate()) {
+                                        name = value;
+                                      }
+                                    }),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(8.0),
@@ -85,23 +98,20 @@ class _SignUpPageState extends State<SignUpPage> {
                                         bottom:
                                             BorderSide(color: Colors.grey))),
                                 child: TextFormField(
+                                  key: fieldKeys['email'],
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Email",
                                       suffixIcon: const Icon(Icons.email),
                                       hintStyle:
                                           TextStyle(color: Colors.grey[400])),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter email';
+                                  validator: isValidEmail,
+                                  onChanged: (value) {
+                                    if (fieldKeys['email']
+                                        .currentState!
+                                        .validate()) {
+                                      email = value;
                                     }
-                                    if (!isEmail(value)) {
-                                      return 'Please enter a valid email';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    if (value != null) email = value;
                                   },
                                 ),
                               ),
@@ -112,54 +122,69 @@ class _SignUpPageState extends State<SignUpPage> {
                                         bottom:
                                             BorderSide(color: Colors.grey))),
                                 child: TextFormField(
+                                  key: fieldKeys["password"],
                                   controller: password,
-                                  obscureText: true,
+                                  obscureText: passflag,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Password",
-                                      suffixIcon:
-                                          const Icon(Icons.visibility_off),
+                                      suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              passflag = !passflag;
+                                            });
+                                          },
+                                          child: passflag
+                                              ? const Icon(Icons.visibility_off)
+                                              : const Icon(Icons.visibility)),
+                                      hintStyle:
+                                          TextStyle(color: Colors.grey[400])),
+                                  validator: isValidPassword,
+                                  onChanged: (value) {
+                                    fieldKeys['password']
+                                        .currentState!
+                                        .validate();
+                                  },
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom:
+                                            BorderSide(color: Colors.grey))),
+                                child: TextFormField(
+                                  key: fieldKeys["confirmpassword"],
+                                  controller: confirmpassword,
+                                  obscureText: conpassflag,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Confirm Password",
+                                      suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              conpassflag = !conpassflag;
+                                            });
+                                          },
+                                          child: conpassflag
+                                              ? const Icon(Icons.visibility_off)
+                                              : const Icon(Icons.visibility)),
                                       hintStyle:
                                           TextStyle(color: Colors.grey[400])),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter password';
                                     }
-                                    if (!checkLength(value)) {
-                                      return 'Password length should be atleast 8 characters!';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom:
-                                            BorderSide(color: Colors.grey))),
-                                child: TextFormField(
-                                  controller: confirmpassword,
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Confirm Password",
-                                      suffixIcon:
-                                          const Icon(Icons.visibility_off),
-                                      hintStyle:
-                                          TextStyle(color: Colors.grey[400])),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter password again';
-                                    }
-                                    if (!checkLength(value)) {
-                                      return 'Password length should be atleast 8 characters!';
-                                    }
                                     if (!passwordsMatch(password.text, value)) {
                                       return 'Password does not match';
                                     }
                                     return null;
                                   },
+                                  onChanged: (value) {
+                                    fieldKeys['confirmpassword']
+                                        .currentState!
+                                        .validate();
+                                  },
                                 ),
                               ),
                               Container(
@@ -169,6 +194,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         bottom:
                                             BorderSide(color: Colors.grey))),
                                 child: TextFormField(
+                                  key: fieldKeys['phone'],
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Phone number",
@@ -176,14 +202,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                           const Icon(Icons.phone_android),
                                       hintStyle:
                                           TextStyle(color: Colors.grey[400])),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter phone number';
+                                  validator: isValidPhone,
+                                  onChanged: (value) {
+                                    if (fieldKeys['phone']
+                                        .currentState!
+                                        .validate()) {
+                                      phone = value;
                                     }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    if (value != null) phone = value;
                                   },
                                 ),
                               ),
@@ -194,48 +219,58 @@ class _SignUpPageState extends State<SignUpPage> {
                                           bottom:
                                               BorderSide(color: Colors.grey))),
                                   child: TextFormField(
+                                    key: fieldKeys["emergencyName"],
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText:
-                                            "Emergency Contact Person Name",
+                                        hintText: "Emergency Contact Name",
                                         suffixIcon: const Icon(Icons.person),
                                         hintStyle:
                                             TextStyle(color: Colors.grey[400])),
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
+                                      if (value == null ||
+                                          value.isEmpty ||
+                                          value == "") {
                                         return 'Please enter name';
                                       }
                                       return null;
                                     },
-                                    onSaved: (value) {
-                                      if (value != null) emergencyName = value;
+                                    onChanged: (value) {
+                                      if (fieldKeys['emergencyName']
+                                          .currentState!
+                                          .validate()) {
+                                        emergencyName = value;
+                                      }
                                     },
                                   )),
                               Container(
                                 padding: const EdgeInsets.all(8.0),
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom:
+                                            BorderSide(color: Colors.grey))),
                                 child: TextFormField(
+                                  key: fieldKeys["emergencyPhone"],
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText:
-                                          "Emergency Contact Phone number",
+                                      hintText: "Emergency Contact Phone",
                                       suffixIcon:
                                           const Icon(Icons.phone_android),
                                       hintStyle:
                                           TextStyle(color: Colors.grey[400])),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter phone number';
+                                  validator: isValidPhone,
+                                  onChanged: (value) {
+                                    if (fieldKeys['emergencyPhone']
+                                        .currentState!
+                                        .validate()) {
+                                      emergencyPhone = value;
                                     }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    if (value != null) emergencyPhone = value;
                                   },
                                 ),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
+                                  key: fieldKeys["emergencyEmail"],
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Emergency Contact Email",
@@ -243,17 +278,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                           const Icon(Icons.phone_android),
                                       hintStyle:
                                           TextStyle(color: Colors.grey[400])),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter email';
+                                  validator: isValidEmail,
+                                  onChanged: (value) {
+                                    if (fieldKeys["emergencyEmail"]
+                                        .currentState!
+                                        .validate()) {
+                                      emergencyEmail = value;
                                     }
-                                    if (!isEmail(value)) {
-                                      return 'Enter valid email';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    if (value != null) emergencyEmail = value;
                                   },
                                 ),
                               ),
@@ -263,21 +294,27 @@ class _SignUpPageState extends State<SignUpPage> {
                         const SizedBox(height: 30),
                         GestureDetector(
                           onTap: () async {
-                            if (await ac.signup(User(
-                                name: name,
-                                email: email,
-                                password: password.text,
-                                phone: phone,
-                                contacts: [
-                                  EmergencyContact(
-                                      email: emergencyEmail,
-                                      name: emergencyName,
-                                      phoneno: emergencyPhone)
-                                ]))) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage()));
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              bool val = await ac.signup(User(
+                                  name: name,
+                                  email: email,
+                                  password: password.text,
+                                  phone: phone,
+                                  contacts: [
+                                    EmergencyContact(
+                                        email: emergencyEmail,
+                                        name: emergencyName,
+                                        phoneno: emergencyPhone)
+                                  ]));
+                              print(val);
+                              if (val) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()));
+                              }
                             }
                           },
                           child: Container(

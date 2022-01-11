@@ -32,7 +32,7 @@ class User {
     return newUser;
   }
 
-  Map toJson() => {
+  Map<String, dynamic> toJson() => {
         'email': email,
         'password': password,
         'name': name,

@@ -29,37 +29,37 @@ class AuthenticationController {
     if (await checkIfUserExists(user.email)) {
       return false;
     }
-
-    print(user.password);
     // hash the password
     user.password = hashPassword(user.password);
 
-    print(user.password);
-
     // add user to database
-
     final CollectionReference userRef =
         FirebaseFirestore.instance.collection('user');
     await userRef.doc(user.email).set(user.toJson());
 
-    return false;
+    return true;
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<Map> login(String email, String password) async {
+    Map result = {'flag': false, 'message': ''};
     try {
       CollectionReference userRef =
           FirebaseFirestore.instance.collection('user');
 
       DocumentSnapshot doc = await userRef.doc(email).get();
       if (doc.exists) {
-        print(doc.data);
-        // if (doc.data["password"] == hashPassword(password)) {
-        return true;
-        // }
+        dynamic docData = doc.data();
+        if (docData["password"] == hashPassword(password)) {
+          result["flag"] = true;
+        } else {
+          result["message"] = 'Please enter correct password.';
+        }
+      } else {
+        result["message"] = 'You don\'t have an account. Please Sign Up!';
       }
-      return false;
     } catch (e) {
-      throw e;
+      result["message"] = 'Please try again later!';
     }
+    return result;
   }
 }
