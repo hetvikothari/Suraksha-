@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:suraksha/Pages/Dashboard/dashboard.dart';
 import 'package:suraksha/Services/auth.dart';
 import 'signup.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,8 +12,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late String email, password;
+  TextEditingController password = TextEditingController();
+  TextEditingController email = TextEditingController();
+  bool passflag = true;
+  Widget _snackbar = Container();
+  final snackBar = SnackBar(content: const Text('Yay! A SnackBar!'));
   AuthenticationController ac = new AuthenticationController();
+  Map fieldKeys = {
+    'email': GlobalKey<FormFieldState>(),
+    'password': GlobalKey<FormFieldState>(),
+  };
+  // String msg = 'abc';
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
@@ -29,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                               image: AssetImage('assets/signup.png'),
                               fit: BoxFit.fill))),
                   Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.all(25.0),
                       child: Column(children: <Widget>[
                         Container(
                             padding: const EdgeInsets.all(5),
@@ -43,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                                       offset: Offset(0, 10))
                                 ]),
                             child: Column(children: <Widget>[
+                              Container(child: _snackbar),
                               Container(
                                   height: 60,
                                   padding: const EdgeInsets.all(8.0),
@@ -51,6 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                                           bottom:
                                               BorderSide(color: Colors.grey))),
                                   child: TextFormField(
+                                    key: fieldKeys["email"],
+                                    controller: email,
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: "Email",
@@ -58,45 +72,68 @@ class _LoginPageState extends State<LoginPage> {
                                         hintStyle:
                                             TextStyle(color: Colors.grey[400])),
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter email';
-                                      }
-                                      return null;
+                                      return value == null || value.isEmpty
+                                          ? 'Email cannot be empty!'
+                                          : null;
                                     },
-                                    onSaved: (value) {
-                                      if (value != null) email = value;
+                                    onChanged: (value) {
+                                      fieldKeys['email']
+                                          .currentState!
+                                          .validate();
                                     },
                                   )),
                               Container(
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
-                                    obscureText: true,
+                                    key: fieldKeys["password"],
+                                    controller: password,
+                                    obscureText: passflag,
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: "Password",
-                                        suffixIcon:
-                                            const Icon(Icons.visibility_off),
+                                        suffixIcon: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                passflag = !passflag;
+                                              });
+                                            },
+                                            child: passflag
+                                                ? const Icon(
+                                                    Icons.visibility_off)
+                                                : const Icon(Icons.visibility)),
                                         hintStyle:
                                             TextStyle(color: Colors.grey[400])),
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter password';
-                                      }
-                                      return null;
+                                      return value == null || value.isEmpty
+                                          ? 'Password cannot be empty!'
+                                          : null;
                                     },
-                                    onSaved: (value) {
-                                      if (value != null) password = value;
+                                    onChanged: (value) {
+                                      fieldKeys["password"]
+                                          .currentState!
+                                          .validate();
                                     },
                                   ))
                             ])),
                         const SizedBox(height: 30),
                         GestureDetector(
                           onTap: () async {
-                            if (await ac.login(email, password)) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Dashboard()));
+                            if (_formKey.currentState!.validate()) {
+                              Map result =
+                                  await ac.login(email.text, password.text);
+                              if (result["flag"]) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Dashboard()));
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: result["message"],
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                );
+                              }
                             }
                           },
                           child: Container(
@@ -115,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                     fontWeight: FontWeight.bold),
                               ))),
                         ),
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 30),
                         const Text("Forgot Password?",
                             style: TextStyle(
                                 color: Color.fromRGBO(143, 148, 251, 1))),
@@ -131,17 +168,6 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text('Don\'t have an account? SignUp',
                                 style: TextStyle(
                                     color: Color.fromRGBO(143, 148, 251, 1)))),
-                        const SizedBox(height: 20),
-                        GestureDetector(
-                            child: const Text("Dashboard",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(143, 148, 251, 1))),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Dashboard()));
-                            })
                       ]))
                 ]))));
   }
