@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:suraksha/Helpers/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyContactsScreen extends StatefulWidget {
   const MyContactsScreen({Key? key}) : super(key: key);
@@ -10,6 +11,20 @@ class MyContactsScreen extends StatefulWidget {
 }
 
 class _MyContactsScreenState extends State<MyContactsScreen> {
+  String? email;
+
+  getUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    email = prefs.getString('email');
+    print(email);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

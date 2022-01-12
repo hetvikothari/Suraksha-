@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Models/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+
+import 'package:suraksha/Services/UserService.dart';
 
 class AuthenticationController {
   String hashPassword(String pass) {
@@ -13,44 +16,47 @@ class AuthenticationController {
   }
 
   Future<bool> checkIfUserExists(String email) async {
-    try {
-      CollectionReference userRef =
-          FirebaseFirestore.instance.collection('user');
-
-      var doc = await userRef.doc(email).get();
-      return doc.exists;
-    } catch (e) {
-      throw e;
-    }
+    User? user = await getUserData(email);
+    return user == null ? false : true;
   }
 
-  Future<bool> signup(User user) async {
+  Future<Map> signup(User user) async {
+    Map result = {'flag': false, 'message': ''};
     // check if the user exists
     if (await checkIfUserExists(user.email)) {
-      return false;
+      result["message"] = "Email Already Exists!";
+    } else {
+      // hash the password
+      user.password = hashPassword(user.password);
+
+      // add user to database
+      try {
+        final CollectionReference userRef =
+            FirebaseFirestore.instance.collection('user');
+        await userRef.doc(user.email).set(user.toJson());
+        result["flag"] = true;
+        result["message"] = "Signup Successful!";
+      } catch (e) {
+        print(e);
+        result["message"] = 'Please try again later!';
+      }
     }
-    // hash the password
-    user.password = hashPassword(user.password);
 
-    // add user to database
-    final CollectionReference userRef =
-        FirebaseFirestore.instance.collection('user');
-    await userRef.doc(user.email).set(user.toJson());
-
-    return true;
+    return result;
   }
 
   Future<Map> login(String email, String password) async {
     Map result = {'flag': false, 'message': ''};
     try {
-      CollectionReference userRef =
-          FirebaseFirestore.instance.collection('user');
-
-      DocumentSnapshot doc = await userRef.doc(email).get();
-      if (doc.exists) {
-        dynamic docData = doc.data();
-        if (docData["password"] == hashPassword(password)) {
+      User? user = await getUserData(email);
+      print("User ...........................");
+      print(user);
+      if (user != null) {
+        if (user.password == hashPassword(password)) {
           result["flag"] = true;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isLoggedIn', true);
+          prefs.setString('userEmail', user.email);
         } else {
           result["message"] = 'Please enter correct password.';
         }
@@ -58,8 +64,15 @@ class AuthenticationController {
         result["message"] = 'You don\'t have an account. Please Sign Up!';
       }
     } catch (e) {
+      print(e);
       result["message"] = 'Please try again later!';
     }
     return result;
+  }
+
+  void logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
+    prefs.setString('userEmail', '');
   }
 }

@@ -34,12 +34,13 @@ dependencies:
   flutter_slidable: ^0.6.0
   flutter_webview_plugin:
   fluttertoast: ^8.0.8
-  google_fonts: ^2.1.0
+  google_fonts: ^2.2.0
   pinput: ^1.2.1
   shake: ^1.0.1
-  url_launcher: ^6.0.10
+  url_launcher:
   cloud_firestore: ^3.1.6
   crypto:
+  shared_preferences: ^2.0.12
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:suraksha/Helpers/validation.dart';
 import 'package:suraksha/Services/auth.dart';
 import 'package:suraksha/Models/EmergencyContact.dart';
 import 'package:suraksha/Models/User.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -296,7 +297,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              bool val = await ac.signup(User(
+                              Map val = await ac.signup(User(
                                   name: name,
                                   email: email,
                                   password: password.text,
@@ -308,12 +309,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                         phoneno: emergencyPhone)
                                   ]));
                               print(val);
-                              if (val) {
+                              if (val["flag"]) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const LoginPage()));
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: val["message"],
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                );
                               }
                             }
                           },
