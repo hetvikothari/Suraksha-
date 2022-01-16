@@ -11,7 +11,6 @@ class AuthenticationController {
   String hashPassword(String pass) {
     var bytes = utf8.encode(pass); // data being hashed
     var encryptedS = sha256.convert(bytes);
-    print(encryptedS.toString());
     return encryptedS.toString();
   }
 
@@ -49,8 +48,6 @@ class AuthenticationController {
     Map result = {'flag': false, 'message': ''};
     try {
       User? user = await getUserData(email);
-      print("User ...........................");
-      print(user);
       if (user != null) {
         if (user.password == hashPassword(password)) {
           result["flag"] = true;

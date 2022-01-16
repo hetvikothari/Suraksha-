@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:suraksha/Helpers/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:suraksha/Models/EmergencyContact.dart';
+import 'package:suraksha/Models/User.dart';
+import 'package:suraksha/Services/UserService.dart';
 
 class MyContactsScreen extends StatefulWidget {
   const MyContactsScreen({Key? key}) : super(key: key);
@@ -12,11 +15,16 @@ class MyContactsScreen extends StatefulWidget {
 
 class _MyContactsScreenState extends State<MyContactsScreen> {
   String? email;
+  List<EmergencyContact>? ecList;
+  int ecLen = 0;
 
   getUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString('email');
-    print(email);
+    email = prefs.getString('userEmail');
+    User? user = await getUserData(email!);
+    ecList = user!.contacts;
+    ecLen = ecList!.length;
+    setState(() {});
   }
 
   @override
@@ -39,22 +47,29 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
           backgroundColor: primaryColor,
           leading: IconButton(
               icon: Image.asset("assets/phone_red.png"), onPressed: () {})),
-      body: Column(
-        children: const [
-          contactCard(number: '1234567890', title: "Alice"),
-          SizedBox(height: 10),
-          contactCard(number: '9123456780', title: "Bob")
-        ],
-      ),
+      body: ecList != null
+          ? ListView.builder(
+              itemCount: ecLen,
+              itemBuilder: (BuildContext context, int index) {
+                return contactCard(ec: ecList![index]);
+              })
+          : Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircularProgressIndicator()),
+                  Text('Awaiting result...'),
+                ])),
     );
   }
 }
 
 class contactCard extends StatelessWidget {
-  final String title;
-  final String number;
-  const contactCard({Key? key, required this.number, required this.title})
-      : super(key: key);
+  final EmergencyContact ec;
+  const contactCard({Key? key, required this.ec}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +82,8 @@ class contactCard extends StatelessWidget {
                 leading: CircleAvatar(
                     backgroundColor: Colors.grey[200],
                     backgroundImage: const AssetImage("assets/user.png")),
-                title: Text(title),
-                subtitle: Text(number))),
+                title: Text(ec.name),
+                subtitle: Text(ec.phoneno))),
         secondaryActions: <Widget>[
           IconSlideAction(
               caption: 'Delete',
