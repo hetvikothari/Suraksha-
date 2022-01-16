@@ -7,29 +7,14 @@ import 'package:suraksha/Models/User.dart';
 
 Future<User?> getUserData(String email) async {
   try {
-    print("email.....");
-    print(email);
-    CollectionReference userRef =
-        FirebaseFirestore.instance.collection('email');
-
-    userRef.doc(email).get().then((value) {
-      dynamic docData = value.data();
-      User? user;
-      if (value.exists) {
-        dynamic docData = value.data();
-        user = User.fromMap(docData);
-      }
-      return user;
-    });
-    // print(doc);
-    // if (doc.exists) {
-    //   dynamic docData = doc.data();
-    //   print(docData);
-    //   User user = User.fromMap(docData);
-    //   print(user);
-    //   return user;
-    // }
-    return null;
+    CollectionReference userRef = FirebaseFirestore.instance.collection('user');
+    User? user;
+    DocumentSnapshot doc = await userRef.doc(email).get();
+    if (doc.exists) {
+      dynamic docData = doc.data();
+      user = User.fromMap(docData);
+    }
+    return user;
   } catch (e) {
     print(e);
     return null;

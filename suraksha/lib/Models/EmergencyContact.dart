@@ -6,7 +6,7 @@ class EmergencyContact {
   EmergencyContact(
       {required this.email, required this.name, required this.phoneno});
 
-  factory EmergencyContact.fromMap(Map<String, String> json) {
+  factory EmergencyContact.fromMap(Map<String, dynamic> json) {
     EmergencyContact newUser = EmergencyContact(
         email: json['email'].toString(),
         name: json['name'].toString(),

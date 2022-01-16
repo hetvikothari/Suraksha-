@@ -15,10 +15,10 @@ class User {
       required this.phone,
       required this.contacts});
 
-  factory User.fromMap(Map<String, String> json) {
+  factory User.fromMap(Map<String, dynamic> json) {
     List<EmergencyContact> contacts = [];
     if (json['contacts'] != null) {
-      contacts = (json["contacts"] as List<Map<String, String>>)
+      contacts = (json["contacts"] as List<dynamic>)
           .map((i) => EmergencyContact.fromMap(i))
           .toList();
     }

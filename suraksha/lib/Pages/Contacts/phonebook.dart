@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:suraksha/Pages/Contacts/mycontacts.dart';
+// import 'package:suraksha/Pages/Contacts/mycontacts.dart';
 import 'package:suraksha/Helpers/constants.dart';
 
 class PhoneBook extends StatefulWidget {
@@ -45,9 +45,6 @@ class _PhoneBookState extends State<PhoneBook> {
                     hintText: 'Search Name',
                     hintStyle: const TextStyle(color: Colors.white70)),
                 onChanged: (string) {})),
-        body: Column(children: const [
-          contactCard(number: '1234567890', title: "Alice"),
-          contactCard(number: '9123456780', title: "Bob")
-        ]));
+        body: Column(children: const []));
   }
 }

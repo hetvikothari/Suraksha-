@@ -308,7 +308,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                         name: emergencyName,
                                         phoneno: emergencyPhone)
                                   ]));
-                              print(val);
                               if (val["flag"]) {
                                 Navigator.push(
                                     context,
