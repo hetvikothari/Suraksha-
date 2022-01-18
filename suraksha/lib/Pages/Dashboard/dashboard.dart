@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suraksha/Pages/Contacts/mycontacts.dart';
-import 'package:suraksha/Pages/Contacts/phonebook.dart';
+import 'package:suraksha/Pages/Contacts/addContact.dart';
 import 'package:suraksha/Pages/Dashboard/home.dart';
 
 class Dashboard extends StatefulWidget {
@@ -28,8 +28,10 @@ class _DashboardState extends State<Dashboard> {
           ? FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const PhoneBook()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddContactPage()));
               },
               child: Image.asset("assets/add-contact.png", height: 60),
             )

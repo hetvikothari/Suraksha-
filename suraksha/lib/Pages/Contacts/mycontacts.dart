@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:suraksha/Helpers/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Models/EmergencyContact.dart';
 import 'package:suraksha/Models/User.dart';
+import 'package:suraksha/Pages/Contacts/contactDetails.dart';
 import 'package:suraksha/Services/UserService.dart';
 
 class MyContactsScreen extends StatefulWidget {
@@ -51,7 +51,15 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
           ? ListView.builder(
               itemCount: ecLen,
               itemBuilder: (BuildContext context, int index) {
-                return contactCard(ec: ecList![index]);
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ContactDetailPage(ec: ecList![index])));
+                    },
+                    child: ContactCard(ec: ecList![index]));
               })
           : Center(
               child: Column(
@@ -67,29 +75,19 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
   }
 }
 
-class contactCard extends StatelessWidget {
+class ContactCard extends StatelessWidget {
   final EmergencyContact ec;
-  const contactCard({Key? key, required this.ec}) : super(key: key);
+  const ContactCard({Key? key, required this.ec}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-        actionPane: const SlidableDrawerActionPane(),
-        actionExtentRatio: 0.25,
-        child: Container(
-            color: Colors.white,
-            child: ListTile(
-                leading: CircleAvatar(
-                    backgroundColor: Colors.grey[200],
-                    backgroundImage: const AssetImage("assets/user.png")),
-                title: Text(ec.name),
-                subtitle: Text(ec.phoneno))),
-        secondaryActions: <Widget>[
-          IconSlideAction(
-              caption: 'Delete',
-              color: Colors.red,
-              icon: Icons.delete,
-              onTap: () {}),
-        ]);
+    return Container(
+        color: Colors.white,
+        child: ListTile(
+            leading: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                backgroundImage: const AssetImage("assets/user.png")),
+            title: Text(ec.name),
+            subtitle: Text(ec.phoneno)));
   }
 }
