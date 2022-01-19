@@ -12,6 +12,7 @@ Future<User?> getUserData(String email) async {
     DocumentSnapshot doc = await userRef.doc(email).get();
     if (doc.exists) {
       dynamic docData = doc.data();
+      print(docData);
       user = User.fromMap(docData);
     }
     return user;

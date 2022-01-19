@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^3.1.6
   crypto:
   shared_preferences: ^2.0.12
+  flutter_phone_direct_caller: ^2.0.0
 
 dev_dependencies:
   flutter_test:

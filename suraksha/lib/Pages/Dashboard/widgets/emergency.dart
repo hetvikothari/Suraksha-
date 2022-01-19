@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class Emergency extends StatelessWidget {
   const Emergency({Key? key}) : super(key: key);
@@ -68,7 +69,9 @@ class EmergencyCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  _callNumber(number);
+                },
                 child: Container(
                     height: 180,
                     width: MediaQuery.of(context).size.width * 0.7,
@@ -120,4 +123,8 @@ class EmergencyCard extends StatelessWidget {
                                                   fontSize: 18)))))
                             ]))))));
   }
+}
+
+_callNumber(number) async {
+  await FlutterPhoneDirectCaller.callNumber(number);
 }

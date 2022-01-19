@@ -53,7 +53,7 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>

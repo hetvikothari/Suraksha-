@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
 
   getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString('email');
+    email = prefs.getString('userEmail');
   }
 
   @override
