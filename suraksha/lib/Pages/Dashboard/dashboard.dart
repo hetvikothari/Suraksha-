@@ -28,7 +28,7 @@ class _DashboardState extends State<Dashboard> {
           ? FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const AddContactPage()));

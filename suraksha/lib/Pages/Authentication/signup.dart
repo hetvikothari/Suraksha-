@@ -309,7 +309,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         phoneno: emergencyPhone)
                                   ]));
                               if (val["flag"]) {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
@@ -340,7 +340,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         const SizedBox(height: 20.0),
                         GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const LoginPage()));

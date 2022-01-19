@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                               Map result =
                                   await ac.login(email.text, password.text);
                               if (result["flag"]) {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 20.0),
                         GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
