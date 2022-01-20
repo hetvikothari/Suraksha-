@@ -127,6 +127,11 @@ class _LoginPageState extends State<LoginPage> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const Dashboard()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Dashboard()));
                               } else {
                                 Fluttertoast.showToast(
                                   msg: result["message"],

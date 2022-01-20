@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:suraksha/Pages/Dashboard/dashboard.dart';
@@ -9,8 +11,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setBool('isLoggedIn', false);
-  prefs.setString('userEmail', '');
+  String? email = prefs.getString('userEmail');
+  print(email);
+  if (email == null || email == '') {
+    prefs.setBool('isLoggedIn', false);
+    prefs.setString('userEmail', '');
+  }
   runApp(MyApp());
 }
 
@@ -22,11 +28,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static String? email;
+  String? email;
 
   getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString('userEmail');
+    setState(() {
+      email = prefs.getString('userEmail');
+    });
+    print("Inside function...." + email!);
   }
 
   @override
