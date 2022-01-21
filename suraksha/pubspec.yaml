@@ -35,12 +35,17 @@ dependencies:
   fluttertoast: ^8.0.8
   google_fonts: ^2.2.0
   pinput: ^1.2.1
-  shake: ^1.0.1
   url_launcher:
   cloud_firestore: ^3.1.6
   crypto:
   shared_preferences: ^2.0.12
   flutter_phone_direct_caller: ^2.0.0
+  flutter_background_service: ^0.2.2
+  shake: ^2.0.0 
+  vibration: ^1.7.3 
+  background_location: ^0.7.0
+  telephony: ^0.1.4
+  workmanager: ^0.4.1
 
 dev_dependencies:
   flutter_test:

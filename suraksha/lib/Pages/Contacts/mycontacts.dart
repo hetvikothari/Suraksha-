@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Models/EmergencyContact.dart';
 import 'package:suraksha/Models/User.dart';
 import 'package:suraksha/Pages/Contacts/contactDetails.dart';
+import 'package:suraksha/Pages/Dashboard/dashboard.dart';
 import 'package:suraksha/Services/UserService.dart';
 
 class MyContactsScreen extends StatefulWidget {
@@ -33,44 +34,53 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
     getUserInfo();
   }
 
+  Future<bool> _onWillPop() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Dashboard()));
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          title: const Text("SOS Contacts",
-              style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black)),
-          backgroundColor: primaryColor,
-          leading: IconButton(
-              icon: Image.asset("assets/phone_red.png"), onPressed: () {})),
-      body: ecList != null
-          ? ListView.builder(
-              itemCount: ecLen,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ContactDetailPage(ec: ecList![index])));
-                    },
-                    child: ContactCard(ec: ecList![index]));
-              })
-          : Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircularProgressIndicator()),
-                  Text('Awaiting result...'),
-                ])),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+            centerTitle: true,
+            elevation: 0,
+            title: const Text("SOS Contacts",
+                style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black)),
+            backgroundColor: primaryColor,
+            leading: IconButton(
+                icon: Image.asset("assets/phone_red.png"), onPressed: () {})),
+        body: ecList != null
+            ? ListView.builder(
+                itemCount: ecLen,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ContactDetailPage(ec: ecList![index])));
+                      },
+                      child: ContactCard(ec: ecList![index]));
+                })
+            : Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CircularProgressIndicator()),
+                    Text('Awaiting result...'),
+                  ])),
+      ),
     );
   }
 }
