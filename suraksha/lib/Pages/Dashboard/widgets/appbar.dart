@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suraksha/Helpers/constants.dart';
+import 'package:suraksha/Pages/Settings/SettingsScreen.dart';
 
 class DashAppbar extends StatelessWidget {
   final Function getRandomInt;
@@ -23,13 +24,21 @@ class DashAppbar extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 20)),
         ),
-        trailing: Card(
-            elevation: 4,
-            shape: const CircleBorder(),
-            child: InkWell(
-              child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Image.asset("assets/settings.png", height: 24)),
-            )));
+        trailing: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SettingsScreen()));
+          },
+          child: Card(
+              elevation: 4,
+              shape: const CircleBorder(),
+              child: InkWell(
+                child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Image.asset("assets/settings.png", height: 24)),
+              )),
+        ));
   }
 }

@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                               Map result =
                                   await ac.login(email.text, password.text);
                               if (result["flag"]) {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
