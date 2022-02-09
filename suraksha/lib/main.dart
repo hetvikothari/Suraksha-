@@ -7,10 +7,6 @@ import 'package:suraksha/Pages/Dashboard/dashboard.dart';
 import 'package:suraksha/Pages/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shake/shake.dart';
-// ignore: import_of_legacy_library_into_null_safe
-// import 'package:vibration/vibration.dart';
-import 'package:background_location/background_location.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,11 +84,11 @@ void onStart() {
     );
   });
 
-  ShakeDetector.autoStart(
-      shakeThresholdGravity: 7,
-      onPhoneShake: () async {
-        print("Test");
-      });
+  // ShakeDetector.autoStart(
+  //     shakeThresholdGravity: 7,
+  //     onPhoneShake: () async {
+  //       print("Test");
+  //     });
 }
 
 // Future<void> onStart() async {
