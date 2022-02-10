@@ -44,6 +44,10 @@ dependencies:
   background_location: ^0.7.0
   telephony: ^0.1.4
   workmanager: ^0.4.1
+  shake: ^2.0.0
+  lottie:
+  flutter_spinkit:
+  
 
 dev_dependencies:
   flutter_test:

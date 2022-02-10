@@ -7,6 +7,9 @@ import 'package:suraksha/Pages/Dashboard/dashboard.dart';
 import 'package:suraksha/Pages/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shake/shake.dart';
+import 'package:hardware_buttons/hardware_buttons.dart';
+// import 'package:hardware_buttons/hardware_buttons.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -169,6 +172,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getEmail();
+    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
+      print("SHAKE DETECTOR");
+    });
   }
 
   @override
