@@ -3,7 +3,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:suraksha/Models/EmergencyContact.dart';
+import 'package:suraksha/Services/UserService.dart';
 import 'package:workmanager/workmanager.dart';
 
 class SafeHome extends StatefulWidget {
@@ -259,9 +260,12 @@ class _SafeHomeState extends State<SafeHome> {
 
   Future<List<String>> getSOSNumbers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    numbers = prefs.getStringList("numbers") ?? [];
-
+    String? email = prefs.getString('userEmail');
+    List<EmergencyContact> contacts = await getUserContacts(email!);
+    numbers = [];
+    for (EmergencyContact i in contacts) {
+      numbers.add(i.name + "***" + i.phoneno);
+    }
     return numbers;
   }
 }
