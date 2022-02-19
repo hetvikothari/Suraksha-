@@ -11,6 +11,8 @@ import 'package:shake/shake.dart';
 import 'package:telephony/telephony.dart';
 import 'package:workmanager/workmanager.dart';
 
+import 'Services/GenerateAlert.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeService();
@@ -30,17 +32,16 @@ void main() async {
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    String contact = inputData!['contact'];
+    List contacts = inputData!['contacts'];
     final prefs = await SharedPreferences.getInstance();
     List<String>? location = prefs.getStringList("location");
     String a = location![0];
     String b = location[1];
     String link = "http://maps.google.com/?q=${a},${b}";
-    print(contact);
-    print(location);
-    print(link);
-    Telephony.backgroundInstance
-        .sendSms(to: contact, message: "I am on my way! Track me here.\n$link");
+    for (String contact in contacts) {
+      Telephony.backgroundInstance.sendSms(
+          to: contact, message: "I am on my way! Track me here.\n$link");
+    }
     return true;
   });
 }
@@ -198,6 +199,7 @@ class _MyAppState extends State<MyApp> {
     getEmail();
     ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
       print("SHAKE DETECTOR");
+      generateAlert();
     });
   }
 
