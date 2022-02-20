@@ -3,6 +3,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Pages/Authentication/login.dart';
 import 'package:suraksha/Pages/Settings/changePin.dart';
+import 'package:suraksha/Services/AudioRecording.dart';
 import 'package:suraksha/Services/auth.dart';
 // import 'package:womensafteyhackfair/main.dart';
 
@@ -178,6 +179,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               )),
             ),
           ),
+      GestureDetector(
+            onTap: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => AudioRecorder(title: 'Recorder')));
+            },
+            child: ListTile(
+              title: Text("Record"),
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                child: Center(
+                    child: Icon(
+                  Icons.logout,
+                  size: 24,
+                ))))),
+
           GestureDetector(
             onTap: () {
               AuthenticationController ac = new AuthenticationController();

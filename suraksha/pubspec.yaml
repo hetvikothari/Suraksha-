@@ -46,6 +46,12 @@ dependencies:
   shake: ^2.0.0
   lottie:
   flutter_spinkit:
+  flutter_sound: ^8.1.9
+  record: ^3.0.2
+  permission_handler: ^8.1.2
+  path: ^1.8.0
+  assets_audio_player: ^3.0.3+3
+  intl: ^0.17.0
   
 
 dev_dependencies:

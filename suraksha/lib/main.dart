@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shake/shake.dart';
 import 'package:telephony/telephony.dart';
 import 'package:workmanager/workmanager.dart';
-
+import 'package:flutter_sound/flutter_sound.dart';
 import 'Services/GenerateAlert.dart';
 
 void main() async {
