@@ -9,7 +9,6 @@ import 'package:path/path.dart' as path;
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-
 class AudioRecorder extends StatefulWidget {
   AudioRecorder({Key? key, required this.title}) : super(key: key);
 
@@ -33,7 +32,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
   }
 
   void startIt() async {
-    filePath = '/Downloads/temp.wav';
+    filePath = '/sdcard/Downloads/temp2.wav';
     _myRecorder = FlutterSoundRecorder();
 
     await _myRecorder.openAudioSession(
@@ -55,82 +54,51 @@ class _AudioRecorderState extends State<AudioRecorder> {
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(''),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      ),
+          title: Text(''), backgroundColor: Colors.transparent, elevation: 0.0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 400.0,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color.fromARGB(255, 2, 199, 226), Color.fromARGB(255, 6, 75, 210)],
-                ),
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.elliptical(MediaQuery.of(context).size.width, 100.0),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  _recorderTxt,
-                  style: TextStyle(fontSize: 70),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                buildElevatedButton(
-                  icon: Icons.mic,
-                  iconColor: Colors.red,
-                  f: record,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                buildElevatedButton(
-                  icon: Icons.stop,
-                  iconColor: Colors.black,
-                  f: stopRecord,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                buildElevatedButton(
-                  icon: Icons.play_arrow,
-                  iconColor: Colors.black,
-                  f: startPlaying,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                buildElevatedButton(
-                  icon: Icons.stop,
-                  iconColor: Colors.black,
-                  f: stopPlaying,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
+                height: 400.0,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color.fromARGB(255, 2, 199, 226),
+                          Color.fromARGB(255, 6, 75, 210)
+                        ]),
+                    borderRadius: BorderRadius.vertical(
+                        bottom: Radius.elliptical(
+                            MediaQuery.of(context).size.width, 100.0))),
+                child: Center(
+                  child: Text(_recorderTxt, style: TextStyle(fontSize: 70)),
+                )),
+            SizedBox(height: 20),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              buildElevatedButton(
+                  icon: Icons.mic, iconColor: Colors.red, f: record),
+              SizedBox(width: 30),
+              buildElevatedButton(
+                  icon: Icons.stop, iconColor: Colors.pink, f: stopRecord)
+            ]),
+            SizedBox(height: 20),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: <Widget>[
+            //     buildElevatedButton(
+            //         icon: Icons.play_arrow,
+            //         iconColor: Colors.black,
+            //         f: startPlaying),
+            //     SizedBox(width: 30),
+            //     buildElevatedButton(
+            //         icon: Icons.stop, iconColor: Colors.black, f: stopPlaying)
+            //   ],
+            // ),
+            SizedBox(height: 20),
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                elevation: 10.0,
-              ),
+              style: ElevatedButton.styleFrom(elevation: 10.0),
               onPressed: () {
                 setState(() {
                   _play = !_play;
@@ -138,24 +106,10 @@ class _AudioRecorderState extends State<AudioRecorder> {
                 if (_play) startPlaying();
                 if (!_play) stopPlaying();
               },
-              icon: _play
-                  ? Icon(
-                      Icons.stop,
-                    )
-                  : Icon(Icons.play_arrow),
+              icon: _play ? Icon(Icons.stop) : Icon(Icons.play_arrow),
               label: _play
-                  ? Text(
-                      "Stop Playing",
-                      style: TextStyle(
-                        fontSize: 25,
-                      ),
-                    )
-                  : Text(
-                      "Start Playing",
-                      style: TextStyle(
-                        fontSize: 25,
-                      ),
-                    ),
+                  ? Text("Stop Playing", style: TextStyle(fontSize: 25))
+                  : Text("Start Playing", style: TextStyle(fontSize: 25)),
             ),
           ],
         ),
@@ -163,28 +117,21 @@ class _AudioRecorderState extends State<AudioRecorder> {
     );
   }
 
-  ElevatedButton buildElevatedButton({required IconData icon, required Color iconColor, required  VoidCallback f}) {
+  ElevatedButton buildElevatedButton(
+      {required IconData icon,
+      required Color iconColor,
+      required VoidCallback f}) {
     return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(5.0),
-        side: BorderSide(
-          color: Colors.orange,
-          width: 3.0,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        primary: Colors.white,
-        elevation: 10.0,
-      ),
-      onPressed: f,
-      icon: Icon(
-        icon,
-        color: iconColor,
-        size: 35.0,
-      ),
-      label: Text(''),
-    );
+        style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(5.0),
+            side: BorderSide(color: Colors.orange, width: 3.0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            primary: Colors.white,
+            elevation: 10.0),
+        onPressed: f,
+        icon: Icon(icon, color: iconColor, size: 35.0),
+        label: Text(''));
   }
 
   Future<void> record() async {
@@ -193,13 +140,12 @@ class _AudioRecorderState extends State<AudioRecorder> {
       dir.createSync();
     }
     _myRecorder.openAudioSession();
-    await _myRecorder.startRecorder(
-      toFile: filePath,
-      codec: Codec.pcm16WAV,
-    );
+    await _myRecorder.startRecorder(toFile: filePath, codec: Codec.pcm16WAV);
 
-    StreamSubscription _recorderSubscription = _myRecorder.onProgress!.listen((e) {
-      var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds, isUtc: true);
+    StreamSubscription _recorderSubscription =
+        _myRecorder.onProgress!.listen((e) {
+      var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds,
+          isUtc: true);
       var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
 
       setState(() {
@@ -215,11 +161,8 @@ class _AudioRecorderState extends State<AudioRecorder> {
   }
 
   Future<void> startPlaying() async {
-    audioPlayer.open(
-      Audio.file(filePath),
-      autoStart: true,
-      showNotification: true,
-    );
+    audioPlayer.open(Audio.file(filePath),
+        autoStart: true, showNotification: true);
   }
 
   Future<void> stopPlaying() async {

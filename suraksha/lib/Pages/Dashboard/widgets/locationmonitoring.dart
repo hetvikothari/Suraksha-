@@ -1,32 +1,19 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:suraksha/Services/GenerateAlert.dart';
-// import 'package:workmanager/workmanager.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path/path.dart' as path;
-import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:intl/intl.dart' show DateFormat;
+import 'package:suraksha/Services/GenerateAlert.dart';
+import 'package:workmanager/workmanager.dart';
 
-class SafeHome extends StatefulWidget {
-  const SafeHome({Key? key}) : super(key: key);
+class LocationMonitoring extends StatefulWidget {
+  const LocationMonitoring({Key? key}) : super(key: key);
 
   @override
-  _SafeHomeState createState() => _SafeHomeState();
+  _LocationMonitoringState createState() => _LocationMonitoringState();
 }
 
-class _SafeHomeState extends State<SafeHome> {
-  late FlutterSoundRecorder _myRecorder;
-  final audioPlayer = AssetsAudioPlayer();
-  late String filePath;
-  bool _play = false;
-  String _recorderTxt = '00:00:00';
+class _LocationMonitoringState extends State<LocationMonitoring> {
   bool getHomeSafeActivated = false;
   List<String> numbers = [];
 
@@ -53,21 +40,7 @@ class _SafeHomeState extends State<SafeHome> {
   }
 
   @override
-  Future<void> initState() async {
-    filePath = '/sdcard/Downloads/temp2.wav';
-    _myRecorder = FlutterSoundRecorder();
-
-    await _myRecorder.openAudioSession(
-        focus: AudioFocus.requestFocusAndStopOthers,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        device: AudioDevice.speaker);
-    await _myRecorder.setSubscriptionDuration(Duration(milliseconds: 10));
-    await initializeDateFormatting();
-
-    await Permission.microphone.request();
-    await Permission.storage.request();
-    await Permission.manageExternalStorage.request();
+  void initState() {
     super.initState();
     checkGetHomeActivated();
   }
@@ -157,14 +130,10 @@ class _SafeHomeState extends State<SafeHome> {
                             });
                             if (getHomeActivated) {
                               changeStateOfHomeSafe(true);
-                              print("ALert generated...start recoding");
-                              record();
-                              // generateAlert();
+                              generateAlert();
                             } else {
                               changeStateOfHomeSafe(false);
-                              // await Workmanager().cancelByTag("3");
-                              print("stop recording..");
-                              stopRecord();
+                              await Workmanager().cancelByTag("3");
                             }
                           },
                           subtitle: Text(
@@ -172,31 +141,5 @@ class _SafeHomeState extends State<SafeHome> {
                 ]));
           });
         });
-  }
-
-  Future<void> record() async {
-    Directory dir = Directory(path.dirname(filePath));
-    if (!dir.existsSync()) {
-      dir.createSync();
-    }
-    _myRecorder.openAudioSession();
-    await _myRecorder.startRecorder(toFile: filePath, codec: Codec.pcm16WAV);
-
-    StreamSubscription _recorderSubscription =
-        _myRecorder.onProgress!.listen((e) {
-      var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds,
-          isUtc: true);
-      var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
-
-      setState(() {
-        _recorderTxt = txt.substring(0, 8);
-      });
-    });
-    _recorderSubscription.cancel();
-  }
-
-  Future<String?> stopRecord() async {
-    _myRecorder.closeAudioSession();
-    return await _myRecorder.stopRecorder();
   }
 }
