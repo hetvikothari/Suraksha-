@@ -69,7 +69,7 @@ class _LocationMonitoringState extends State<LocationMonitoring> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                             ListTile(
-                                title: Text("Get Home Safe"),
+                                title: Text("Location Monitoring"),
                                 subtitle: Text("Share Location Periodically")),
                             Visibility(
                                 visible: getHomeSafeActivated,
@@ -86,7 +86,8 @@ class _LocationMonitoringState extends State<LocationMonitoring> {
                           ])),
                       ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.asset("assets/route.jpg", height: 140))
+                          child:
+                              Image.asset("assets/Location.png", height: 140))
                     ])))));
   }
 

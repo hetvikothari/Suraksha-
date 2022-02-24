@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:suraksha/Services/GenerateAlert.dart';
-// import 'package:workmanager/workmanager.dart';
+import 'package:suraksha/Models/EmergencyContact.dart';
+import 'package:suraksha/Services/UserService.dart';
+import 'package:workmanager/workmanager.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -53,8 +55,14 @@ class _SafeHomeState extends State<SafeHome> {
   }
 
   @override
-  Future<void> initState() async {
-    filePath = '/sdcard/Downloads/temp2.wav';
+  void initState() {
+    super.initState();
+    startIt();
+    checkGetHomeActivated();
+  }
+
+  void startIt() async {
+    filePath = '/sdcard/Downloads/temp3.wav';
     _myRecorder = FlutterSoundRecorder();
 
     await _myRecorder.openAudioSession(
@@ -68,56 +76,75 @@ class _SafeHomeState extends State<SafeHome> {
     await Permission.microphone.request();
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
-    super.initState();
-    checkGetHomeActivated();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-        child: InkWell(
-            onTap: () {
-              showModelSafeHome(getHomeSafeActivated);
-            },
-            child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Container(
-                    height: 180,
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    child: Row(children: [
-                      Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+      child: InkWell(
+        onTap: () {
+          showModelSafeHome(getHomeSafeActivated);
+        },
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            height: 180,
+            width: MediaQuery.of(context).size.width * 0.7,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ListTile(
+                        title: Text("Get Home Safe"),
+                        subtitle: Text(
+                            "Monitor Audio Continuously \n\nRecommended in Highly Dangerous Area"),
+                      ),
+                      Visibility(
+                        visible: getHomeSafeActivated,
+                        child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Row(
                               children: [
-                            ListTile(
-                                title: Text("Get Home Safe"),
-                                subtitle: Text("Share Location Periodically")),
-                            Visibility(
-                                visible: getHomeSafeActivated,
-                                child: Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Row(children: [
-                                      SpinKitDoubleBounce(
-                                          color: Colors.red, size: 15),
-                                      SizedBox(width: 15),
-                                      Text("Currently Running...",
-                                          style: TextStyle(
-                                              color: Colors.red, fontSize: 10))
-                                    ])))
-                          ])),
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset("assets/route.jpg", height: 140))
-                    ])))));
+                                SpinKitDoubleBounce(
+                                  color: Colors.red,
+                                  size: 15,
+                                ),
+                                SizedBox(width: 15),
+                                Text("Currently Running...",
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 10)),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      "assets/route.jpg",
+                      height: 140,
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   showModelSafeHome(bool processRunning) async {
+    int selectedContact = -1;
     bool getHomeActivated = processRunning;
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -129,49 +156,86 @@ class _SafeHomeState extends State<SafeHome> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
             return Container(
-                height: MediaQuery.of(context).size.height / 1.4,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30))),
-                child: Column(children: [
+              height: MediaQuery.of(context).size.height / 1.4,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                children: [
                   Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Row(children: [
-                        Expanded(child: Divider(indent: 20, endIndent: 20)),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Divider(
+                          indent: 20,
+                          endIndent: 20,
+                        )),
                         Text("Get Home Safe"),
-                        Expanded(child: Divider(indent: 20, endIndent: 20))
-                      ])),
+                        Expanded(
+                            child: Divider(
+                          indent: 20,
+                          endIndent: 20,
+                        )),
+                      ],
+                    ),
+                  ),
                   Container(
                       margin: EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Color(0xFFF5F4F6)),
                       child: SwitchListTile(
-                          secondary: Lottie.asset("assets/routes.json"),
-                          value: getHomeActivated,
-                          onChanged: (val) async {
-                            setModalState(() {
-                              getHomeActivated = val;
-                            });
-                            if (getHomeActivated) {
-                              changeStateOfHomeSafe(true);
-                              print("ALert generated...start recoding");
-                              record();
-                              // generateAlert();
-                            } else {
-                              changeStateOfHomeSafe(false);
-                              // await Workmanager().cancelByTag("3");
-                              print("stop recording..");
-                              stopRecord();
-                            }
-                          },
-                          subtitle: Text(
-                              "Your location will be shared with one of your contacts every 15 minutes")))
-                ]));
+                        secondary: Lottie.asset("assets/routes.json"),
+                        value: getHomeActivated,
+                        onChanged: (val) async {
+                          setModalState(() {
+                            getHomeActivated = val;
+                          });
+                          if (getHomeActivated) {
+                            changeStateOfHomeSafe(true);
+                            print("Activated.........");
+                            record();
+                            // Workmanager().registerPeriodicTask(
+                            //   "3",
+                            //   'simplePeriodicTask',
+                            //   tag: "3",
+                            //   inputData: {
+                            //     "contact":
+                            //         numbers[selectedContact].split("***")[1]
+                            //   },
+                            //   frequency: Duration(minutes: 15),
+                            // );
+                          } else {
+                            changeStateOfHomeSafe(false);
+                            print("DEActivated.........");
+                            stopRecord();
+                            // await Workmanager().cancelByTag("3");
+                          }
+                        },
+                        subtitle: Text(
+                            "Your location will be shared with one of your contacts every 15 minutes"),
+                      )),
+                ],
+              ),
+            );
           });
         });
+  }
+
+  Future<List<String>> getSOSNumbers() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('userEmail');
+    List<EmergencyContact> contacts = await getUserContacts(email!);
+    numbers = [];
+    for (EmergencyContact i in contacts) {
+      numbers.add(i.name + "***" + i.phoneno);
+    }
+    return numbers;
   }
 
   Future<void> record() async {
@@ -182,17 +246,12 @@ class _SafeHomeState extends State<SafeHome> {
     _myRecorder.openAudioSession();
     await _myRecorder.startRecorder(toFile: filePath, codec: Codec.pcm16WAV);
 
-    StreamSubscription _recorderSubscription =
-        _myRecorder.onProgress!.listen((e) {
-      var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds,
-          isUtc: true);
-      var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
-
-      setState(() {
-        _recorderTxt = txt.substring(0, 8);
-      });
-    });
-    _recorderSubscription.cancel();
+    // StreamSubscription _recorderSubscription =
+    //     _myRecorder.onProgress!.listen((e) {
+    //   var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds,
+    //       isUtc: true);
+    // });
+    // _recorderSubscription.cancel();
   }
 
   Future<String?> stopRecord() async {

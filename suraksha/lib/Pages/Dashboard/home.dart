@@ -5,6 +5,7 @@ import 'package:suraksha/Pages/Dashboard/widgets/appbar.dart';
 import 'package:suraksha/Pages/Dashboard/widgets/carousel.dart';
 import 'package:suraksha/Pages/Dashboard/widgets/emergency.dart';
 import 'package:suraksha/Pages/Dashboard/widgets/livesafe.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/locationmonitoring.dart';
 import 'package:suraksha/Pages/Dashboard/widgets/safehome.dart';
 
 class Home extends StatefulWidget {
@@ -38,34 +39,38 @@ class _HomeState extends State<Home> {
       children: [
         DashAppbar(getRandomInt: getRandomInt, quoteIndex: quoteIndex),
         Expanded(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              const SafeCarousel(),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text("Emergency",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20))),
-                        TextButton(
-                            onPressed: () {}, child: const Text("See More"))
-                      ])),
-              const Emergency(),
-              const Padding(
-                  padding: EdgeInsets.only(left: 16.0, bottom: 10, top: 10),
-                  child: Text("Explore LiveSafe",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20))),
-              const LiveSafe(),
-              const SafeHome(),
-              const SizedBox(height: 50)
-            ],
+          child: SizedBox(
+            height: 100,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                const SafeCarousel(),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("Emergency",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20))),
+                          TextButton(
+                              onPressed: () {}, child: const Text("See More"))
+                        ])),
+                const Emergency(),
+                const Padding(
+                    padding: EdgeInsets.only(left: 16.0, bottom: 10, top: 10),
+                    child: Text("Explore LiveSafe",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20))),
+                const LiveSafe(),
+                const LocationMonitoring(),
+                const SafeHome(),
+                const SizedBox(height: 50)
+              ],
+            ),
           ),
         ),
       ],
