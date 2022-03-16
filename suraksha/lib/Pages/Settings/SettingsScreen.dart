@@ -3,7 +3,9 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Pages/Authentication/login.dart';
 import 'package:suraksha/Pages/Settings/changePin.dart';
-import 'package:suraksha/Services/AudioRecording.dart';
+import 'package:suraksha/Services/Camera.dart';
+// import 'package:suraksha/Services/AudioRecording.dart';
+import 'package:suraksha/Services/VideoRecording.dart';
 import 'package:suraksha/Services/auth.dart';
 // import 'package:womensafteyhackfair/main.dart';
 
@@ -183,10 +185,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onTap: () {
               Navigator.of(context).popUntil((route) => route.isFirst);
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => AudioRecorder(title: 'Recorder')));
+                  MaterialPageRoute(builder: (context) => CameraPage()));
             },
             child: ListTile(
-              title: Text("Record"),
+              title: Text("Video Record"),
               leading: CircleAvatar(
                 backgroundColor: Colors.grey[200],
                 child: Center(

@@ -52,7 +52,10 @@ dependencies:
   path: ^1.8.0
   assets_audio_player: ^3.0.3+3
   intl: ^0.17.0
-  
+  image_picker: any
+  video_player: 
+  camera: ^0.9.4+16
+  gallery_saver: ^2.3.2
 
 dev_dependencies:
   flutter_test:
