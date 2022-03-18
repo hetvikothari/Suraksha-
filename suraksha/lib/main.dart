@@ -12,6 +12,8 @@ import 'package:telephony/telephony.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'Services/GenerateAlert.dart';
+import 'package:volume_watcher/volume_watcher.dart';
+// import 'package:perfect_volume_control/perfect_volume_control.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -169,6 +171,17 @@ Future<void> onStart() async {
       title: "Safe Shake activated!",
       content: screenShake,
     );
+
+    /*PerfectVolumeControl.stream.listen((volume) {  
+      print("volume button is pressed");
+       // this listener will be triggeret 3 times at one button press
+    });*/
+    /*
+
+    */
+//     PerfectVolumeControl.stream.listen((volume) {
+//   print("Volume button Pressed");
+// });
 
     service.sendData(
       {"current_date": DateTime.now().toIso8601String()},

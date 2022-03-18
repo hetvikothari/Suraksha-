@@ -131,7 +131,7 @@ class _LocationMonitoringState extends State<LocationMonitoring> {
                             });
                             if (getHomeActivated) {
                               changeStateOfHomeSafe(true);
-                              generateAlert();
+                              // generateAlert();
                             } else {
                               changeStateOfHomeSafe(false);
                               await Workmanager().cancelByTag("3");
