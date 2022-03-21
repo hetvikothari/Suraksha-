@@ -429,6 +429,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  perfect_volume_control:
+    dependency: "direct main"
+    description:
+      name: perfect_volume_control
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
   permission_handler:
     dependency: "direct main"
     description:
@@ -770,13 +777,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
-  volume_watcher:
-    dependency: "direct main"
-    description:
-      name: volume_watcher
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   win32:
     dependency: transitive
     description:

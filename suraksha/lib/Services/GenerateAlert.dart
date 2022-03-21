@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
-Future<void> generateAlert() async {
+Future<void> sendLocationPeriodically() async {
   List<String> contacts = [];
   final prefs = await SharedPreferences.getInstance();
   String? email = prefs.getString('userEmail');
@@ -19,12 +19,27 @@ Future<void> generateAlert() async {
       tag: "3",
       inputData: {"contacts": contacts},
       frequency: Duration(minutes: 15));
-  VideoRecording obj = new VideoRecording();
-  obj._startRecord();
+}
+
+Future<void> backgroundVideoRecording() async {
+  final cameras = await availableCameras();
+  final front = cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front);
+  CameraController _cameraController =
+      CameraController(front, ResolutionPreset.max);
+  await _cameraController.initialize();
+  await _cameraController.prepareForVideoRecording();
+  await _cameraController.startVideoRecording();
   await Future.delayed(const Duration(seconds: 10), () {});
   print("10 secs Done");
-  obj._stopRecord();
+  final file = await _cameraController.stopVideoRecording();
+  print("\n\n\n");
+  print(file.path);
+  await GallerySaver.saveVideo(file.path);
+  File(file.path).deleteSync();
+  print("recording stopped");
 }
+
 //video recording
 
 class VideoRecording {
@@ -65,4 +80,9 @@ class VideoRecording {
     await this._cameraController!.prepareForVideoRecording();
     await this._cameraController!.startVideoRecording();
   }
+}
+
+Future<void> generateAlert() async {
+  sendLocationPeriodically();
+  backgroundVideoRecording();
 }

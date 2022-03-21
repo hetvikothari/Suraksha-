@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Pages/Authentication/login.dart';
+import 'package:suraksha/Pages/Dashboard/widgets/timerAlertDialogue.dart';
 import 'package:suraksha/Pages/Settings/changePin.dart';
 import 'package:suraksha/Services/Camera.dart';
+import 'package:suraksha/Services/GenerateAlert.dart';
 // import 'package:suraksha/Services/AudioRecording.dart';
 import 'package:suraksha/Services/VideoRecording.dart';
 import 'package:suraksha/Services/auth.dart';
@@ -181,22 +183,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
               )),
             ),
           ),
-      GestureDetector(
-            onTap: () {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => CameraPage()));
-            },
-            child: ListTile(
-              title: Text("Video Record"),
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                    child: Icon(
-                  Icons.logout,
-                  size: 24,
-                ))))),
-
+          GestureDetector(
+              onTap: () {
+                backgroundVideoRecording();
+              },
+              child: ListTile(
+                  title: Text("Video Record"),
+                  leading: CircleAvatar(
+                      backgroundColor: Colors.grey[200],
+                      child: Center(
+                          child: Icon(
+                        Icons.logout,
+                        size: 24,
+                      ))))),
+          GestureDetector(
+              onTap: () {
+                // Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TimeAlertDialogue()));
+              },
+              child: ListTile(
+                  title: Text("Timer Alert Dialogue"),
+                  leading: CircleAvatar(
+                      backgroundColor: Colors.grey[200],
+                      child: Center(
+                          child: Icon(
+                        Icons.logout,
+                        size: 24,
+                      ))))),
           GestureDetector(
             onTap: () {
               AuthenticationController ac = new AuthenticationController();
