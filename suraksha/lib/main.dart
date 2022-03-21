@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:suraksha/Pages/Contacts/mycontacts.dart';
 import 'package:suraksha/Pages/Dashboard/dashboard.dart';
 import 'package:suraksha/Pages/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,9 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shake/shake.dart';
 import 'package:telephony/telephony.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'Services/GenerateAlert.dart';
-// import 'package:volume_watcher/volume_watcher.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
 
 void main() async {
@@ -39,7 +36,7 @@ void callbackDispatcher() {
     List<String>? location = prefs.getStringList("location");
     String a = location![0];
     String b = location[1];
-    String link = "http://maps.google.com/?q=${a},${b}";
+    String link = "http://maps.google.com/?q=$a,$b";
     for (String contact in contacts) {
       Telephony.backgroundInstance.sendSms(
           to: contact, message: "I am on my way! Track me here.\n$link");
@@ -99,8 +96,6 @@ Future<void> onStart() async {
       service.stopBackgroundService();
     }
   });
-  Location _location;
-
   await BackgroundLocation.setAndroidNotification(
     title: "Location tracking is running in the background!",
     message: "You can turn it off from settings menu inside the app",
@@ -112,7 +107,6 @@ Future<void> onStart() async {
 
   BackgroundLocation.getLocationUpdates((location) {
     print(location);
-    _location = location;
     prefs.setStringList("location",
         [location.latitude.toString(), location.longitude.toString()]);
   });
