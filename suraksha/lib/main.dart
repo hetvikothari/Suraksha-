@@ -31,15 +31,27 @@ void main() async {
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    List contacts = inputData!['contacts'];
-    final prefs = await SharedPreferences.getInstance();
-    List<String>? location = prefs.getStringList("location");
-    String a = location![0];
-    String b = location[1];
-    String link = "http://maps.google.com/?q=$a,$b";
-    for (String contact in contacts) {
-      Telephony.backgroundInstance.sendSms(
-          to: contact, message: "I am on my way! Track me here.\n$link");
+    if(task==3){
+      List contacts = inputData!['contacts'];
+      final prefs = await SharedPreferences.getInstance();
+      List<String>? location = prefs.getStringList("location");
+      String a = location![0];
+      String b = location[1];
+      String link = "http://maps.google.com/?q=$a,$b";
+      for (String contact in contacts) {
+        Telephony.backgroundInstance.sendSms(
+            to: contact, message: "I am on my way! Track me here.\n$link");
+      }
+      return true;
+    }
+    if(task==4){
+      List contacts = inputData!['contacts'];
+      String link = inputData['link'];
+      for (String contact in contacts) {
+        Telephony.backgroundInstance.sendSms(
+            to: contact, message: "Check Video Recording here.\n$link");
+      }
+      return true;
     }
     return true;
   });
