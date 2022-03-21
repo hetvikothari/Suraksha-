@@ -20,6 +20,11 @@ Future<void> sendLocationPeriodically() async {
       frequency: Duration(minutes: 15));
 }
 
+Future<void> activateAlertTimer() async {
+  Workmanager().registerOneOffTask("4", "simpleTask",
+      initialDelay: Duration(seconds: 15));
+}
+
 Future<void> backgroundVideoRecording() async {
   final cameras = await availableCameras();
   final front = cameras.firstWhere(
