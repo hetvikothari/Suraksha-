@@ -12,7 +12,8 @@ import 'package:telephony/telephony.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'Services/GenerateAlert.dart';
-// import 'package:perfect_volume_control/perfect_volume_control.dart';
+// import 'package:volume_watcher/volume_watcher.dart';
+import 'package:perfect_volume_control/perfect_volume_control.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -147,7 +148,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String? email;
-
+  double currentvol = 0.5;
+  int keyPressCount = 0;
   getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -161,6 +163,41 @@ class _MyAppState extends State<MyApp> {
     getEmail();
     ShakeDetector _ = ShakeDetector.autoStart(onPhoneShake: () {
       print("SHAKE DETECTOR");
+    });
+    Future.delayed(Duration.zero, () async {
+      currentvol = await PerfectVolumeControl.getVolume();
+    });
+    PerfectVolumeControl.stream.listen((volume) {
+      //volume button is pressed,
+      // this listener will be triggeret 3 times at one button press
+
+      if (volume != currentvol) {
+        //only execute button type check once time
+        //  if(volume > currentvol){ //if new volume is greater, then it up button
+        //     buttontype = "up";
+        //  }else{ //else it is down button
+        //     buttontype = "down";
+        //  }
+        print("\n\n Volume key pressed\n\n");
+        // print("volume:");
+        // print(volume);
+        keyPressCount++;
+        print(keyPressCount);
+        if (keyPressCount == 3) {
+          print("alert generated");
+          keyPressCount = 0;
+          generateAlert();
+        }
+      }
+
+      setState(() {
+        if (volume == 0.0 || volume == 1.0) {
+          PerfectVolumeControl.setVolume(0.5);
+          currentvol = 0.5;
+        } else {
+          currentvol = volume;
+        }
+      });
     });
   }
 
