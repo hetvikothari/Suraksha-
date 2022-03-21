@@ -4,11 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Pages/Authentication/login.dart';
 import 'package:suraksha/Pages/Dashboard/widgets/timerAlertDialogue.dart';
 import 'package:suraksha/Pages/Settings/changePin.dart';
-import 'package:suraksha/Services/Camera.dart';
 import 'package:suraksha/Services/GenerateAlert.dart';
 // import 'package:suraksha/Services/AudioRecording.dart';
-import 'package:suraksha/Services/VideoRecording.dart';
 import 'package:suraksha/Services/auth.dart';
+import 'package:workmanager/workmanager.dart';
 // import 'package:womensafteyhackfair/main.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -206,6 +205,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
               child: ListTile(
                   title: Text("Timer Alert Dialogue"),
+                  leading: CircleAvatar(
+                      backgroundColor: Colors.grey[200],
+                      child: Center(
+                          child: Icon(
+                        Icons.logout,
+                        size: 24,
+                      ))))),
+          GestureDetector(
+              onTap: () {
+                Workmanager().cancelByTag("3");
+              },
+              child: ListTile(
+                  title: Text("Stop Alerts"),
                   leading: CircleAvatar(
                       backgroundColor: Colors.grey[200],
                       child: Center(

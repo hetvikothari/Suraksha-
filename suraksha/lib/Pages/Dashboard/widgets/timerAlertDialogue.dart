@@ -100,12 +100,6 @@ class _TimeAlertDialogueState extends State<TimeAlertDialogue> {
             }));
   }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return alertD(context);

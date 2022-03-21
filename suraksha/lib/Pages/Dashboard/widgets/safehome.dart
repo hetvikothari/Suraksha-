@@ -8,13 +8,11 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suraksha/Models/EmergencyContact.dart';
 import 'package:suraksha/Services/UserService.dart';
-import 'package:workmanager/workmanager.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 class SafeHome extends StatefulWidget {
   const SafeHome({Key? key}) : super(key: key);
@@ -27,8 +25,6 @@ class _SafeHomeState extends State<SafeHome> {
   late FlutterSoundRecorder _myRecorder;
   final audioPlayer = AssetsAudioPlayer();
   late String filePath;
-  bool _play = false;
-  String _recorderTxt = '00:00:00';
   bool getHomeSafeActivated = false;
   List<String> numbers = [];
 
@@ -144,7 +140,6 @@ class _SafeHomeState extends State<SafeHome> {
   }
 
   showModelSafeHome(bool processRunning) async {
-    int selectedContact = -1;
     bool getHomeActivated = processRunning;
     showModalBottomSheet(
         backgroundColor: Colors.transparent,

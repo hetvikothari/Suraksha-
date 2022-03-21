@@ -3,7 +3,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:suraksha/Services/GenerateAlert.dart';
 import 'package:workmanager/workmanager.dart';
 
 class LocationMonitoring extends StatefulWidget {

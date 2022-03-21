@@ -8,7 +8,7 @@ import 'package:suraksha/Pages/Contacts/mycontacts.dart';
 import 'package:suraksha/Services/ContactService.dart';
 
 class EditContactPage extends StatefulWidget {
-  EmergencyContact? ec;
+  final EmergencyContact? ec;
   EditContactPage({Key? key, required this.ec}) : super(key: key);
 
   @override
