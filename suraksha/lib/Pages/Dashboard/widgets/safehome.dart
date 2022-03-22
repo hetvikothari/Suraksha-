@@ -195,21 +195,10 @@ class _SafeHomeState extends State<SafeHome> {
                             changeStateOfHomeSafe(true);
                             print("Activated.........");
                             record();
-                            // Workmanager().registerPeriodicTask(
-                            //   "3",
-                            //   'simplePeriodicTask',
-                            //   tag: "3",
-                            //   inputData: {
-                            //     "contact":
-                            //         numbers[selectedContact].split("***")[1]
-                            //   },
-                            //   frequency: Duration(minutes: 15),
-                            // );
                           } else {
                             changeStateOfHomeSafe(false);
                             print("DEActivated.........");
                             stopRecord();
-                            // await Workmanager().cancelByTag("3");
                           }
                         },
                         subtitle: Text(

@@ -61,6 +61,7 @@ dependencies:
   firebase_core: ^1.0.3
   firebase_storage: ^8.0.3
   file_picker: ^3.0.1
+  system_alert_window: ^1.1.0+1
 
 
 dev_dependencies:
