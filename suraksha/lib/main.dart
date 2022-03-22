@@ -9,8 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shake/shake.dart';
 import 'package:telephony/telephony.dart';
 import 'package:workmanager/workmanager.dart';
-import 'Services/GenerateAlert.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
+import 'package:system_alert_window/system_alert_window.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,12 +21,27 @@ void main() async {
   if (email == null || email == '') {
     prefs.setBool('isLoggedIn', false);
     prefs.setString('userEmail', '');
+    prefs.setBool('alertFlag', true);
   }
   Workmanager().initialize(
     callbackDispatcher,
     isInDebugMode: true,
   );
   runApp(MyApp());
+}
+
+// class AlertVariable {
+//   static bool alertFlag = true;
+// }
+
+void callBack(String tag) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (tag == "cancel_alert") {
+    print(tag);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('alertFlag', false);
+    SystemAlertWindow.closeSystemWindow(prefMode: SystemWindowPrefMode.OVERLAY);
+  }
 }
 
 void callbackDispatcher() {
@@ -96,6 +111,7 @@ Future<void> onStart() async {
       service.stopBackgroundService();
     }
   });
+
   await BackgroundLocation.setAndroidNotification(
     title: "Location tracking is running in the background!",
     message: "You can turn it off from settings menu inside the app",
@@ -154,33 +170,25 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _requestPermissions();
+    SystemAlertWindow.registerOnClickListener(callBack);
     getEmail();
     ShakeDetector _ = ShakeDetector.autoStart(onPhoneShake: () {
       print("SHAKE DETECTOR");
+      _startTimer();
+      _showOverlayWindow();
     });
     Future.delayed(Duration.zero, () async {
       currentvol = await PerfectVolumeControl.getVolume();
     });
     PerfectVolumeControl.stream.listen((volume) {
-      //volume button is pressed,
-      // this listener will be triggeret 3 times at one button press
-
       if (volume != currentvol) {
-        //only execute button type check once time
-        //  if(volume > currentvol){ //if new volume is greater, then it up button
-        //     buttontype = "up";
-        //  }else{ //else it is down button
-        //     buttontype = "down";
-        //  }
         print("\n\n Volume key pressed\n\n");
-        // print("volume:");
-        // print(volume);
         keyPressCount++;
         print(keyPressCount);
         if (keyPressCount == 3) {
           print("alert generated");
           keyPressCount = 0;
-          generateAlert();
         }
       }
 
@@ -195,13 +203,99 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  int _counter = 0;
+  Timer? _timer;
+
+  Future<void> _startTimer() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    _counter = 10;
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_counter > 0) {
+        _counter--;
+      } else {
+        _timer!.cancel();
+        SystemAlertWindow.closeSystemWindow(
+            prefMode: SystemWindowPrefMode.OVERLAY);
+        bool? alertFlag = prefs.getBool('alertFlag');
+        print(alertFlag);
+        if (alertFlag == true) {
+          print("Generating Alert");
+          // generateAlert();
+        } else {
+          print("alert not Generated");
+          prefs.setBool('alertFlag', true);
+        }
+      }
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    await SystemAlertWindow.requestPermissions(
+        prefMode: SystemWindowPrefMode.OVERLAY);
+  }
+
+  void _showOverlayWindow() {
+    SystemWindowHeader header = SystemWindowHeader(
+        title: SystemWindowText(
+            text: "Cancel Alert", fontSize: 15, textColor: Colors.black45),
+        padding: SystemWindowPadding.setSymmetricPadding(12, 12),
+        buttonPosition: ButtonPosition.TRAILING);
+    SystemWindowBody body = SystemWindowBody(
+      rows: [
+        EachRow(
+          columns: [
+            EachColumn(
+              text: SystemWindowText(
+                  text: 'Tap \"Cancel\" immediately to cancel the alert ',
+                  fontSize: 12,
+                  textColor: Colors.black45),
+            )
+          ],
+          gravity: ContentGravity.CENTER,
+        ),
+      ],
+      padding: SystemWindowPadding(left: 16, right: 16, bottom: 12, top: 12),
+    );
+    SystemWindowFooter footer = SystemWindowFooter(
+        buttons: [
+          SystemWindowButton(
+            text: SystemWindowText(
+                text: "Cancel Alert", fontSize: 12, textColor: Colors.white),
+            tag: "cancel_alert",
+            width: 0,
+            padding:
+                SystemWindowPadding(left: 10, right: 10, bottom: 10, top: 10),
+            height: SystemWindowButton.WRAP_CONTENT,
+            decoration: SystemWindowDecoration(
+                startColor: Color.fromRGBO(250, 139, 97, 1),
+                endColor: Color.fromRGBO(247, 28, 88, 1),
+                borderWidth: 0,
+                borderRadius: 30.0),
+          )
+        ],
+        padding: SystemWindowPadding(left: 16, right: 16, bottom: 12),
+        decoration: SystemWindowDecoration(startColor: Colors.white),
+        buttonsPosition: ButtonPosition.CENTER);
+    SystemAlertWindow.showSystemWindow(
+        height: 230,
+        header: header,
+        body: body,
+        footer: footer,
+        margin: SystemWindowMargin(left: 8, right: 8, top: 200, bottom: 0),
+        gravity: SystemWindowGravity.TOP,
+        prefMode: SystemWindowPrefMode.OVERLAY);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Suraksha - Women Safety App',
         theme: ThemeData(
-          // fontFamily: GoogleFonts.poppins().fontFamily,
           primarySwatch: Colors.blue,
         ),
         home: email != null && email != '' ? Dashboard() : Splash());
