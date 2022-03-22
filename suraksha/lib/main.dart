@@ -21,6 +21,7 @@ void main() async {
   if (email == null || email == '') {
     prefs.setBool('isLoggedIn', false);
     prefs.setString('userEmail', '');
+    prefs.setBool('alertFlag', true);
   }
   Workmanager().initialize(
     callbackDispatcher,
@@ -29,15 +30,16 @@ void main() async {
   runApp(MyApp());
 }
 
-class AlertVariable {
-  static bool alertFlag = true;
-}
+// class AlertVariable {
+//   static bool alertFlag = true;
+// }
 
-void callBack(String tag) {
+void callBack(String tag) async {
   WidgetsFlutterBinding.ensureInitialized();
   if (tag == "cancel_alert") {
     print(tag);
-    AlertVariable.alertFlag = false;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('alertFlag', false);
     SystemAlertWindow.closeSystemWindow(prefMode: SystemWindowPrefMode.OVERLAY);
   }
 }
@@ -204,7 +206,9 @@ class _MyAppState extends State<MyApp> {
   int _counter = 0;
   Timer? _timer;
 
-  void _startTimer() {
+  Future<void> _startTimer() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     _counter = 10;
     if (_timer != null) {
       _timer!.cancel();
@@ -216,13 +220,14 @@ class _MyAppState extends State<MyApp> {
         _timer!.cancel();
         SystemAlertWindow.closeSystemWindow(
             prefMode: SystemWindowPrefMode.OVERLAY);
-        print(AlertVariable.alertFlag);
-        if (AlertVariable.alertFlag == true) {
+        bool? alertFlag = prefs.getBool('alertFlag');
+        print(alertFlag);
+        if (alertFlag == true) {
           print("Generating Alert");
           // generateAlert();
         } else {
           print("alert not Generated");
-          AlertVariable.alertFlag = true;
+          prefs.setBool('alertFlag', true);
         }
       }
     });
