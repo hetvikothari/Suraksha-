@@ -1,1 +1,1 @@
-# BE_PROJECT
+# Surasksha - Smart Safety App
